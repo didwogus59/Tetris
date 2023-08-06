@@ -7,5 +7,4 @@ enum eKeyCode
     KEY_LEFT = 75,   // 방향키 ←
     KEY_RIGHT = 77,  // 방향키 →
     KEY_SPACE = 32,  // 스페이스바
-    KEY_R = 114,     // R키
 };

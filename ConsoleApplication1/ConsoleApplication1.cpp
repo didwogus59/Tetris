@@ -20,8 +20,11 @@ void start_game() {
 	clock_t cur_time = 0, bef_time = 0;
 	while (1) {
 		if (check_block) {
-			if (myboard->get_block(dis(gen),dis(gen)%4))
-				exit(1);
+			if (myboard->get_block(dis(gen), dis(gen) % 4)) {
+				destroy_buffer();
+				myboard->show_point();
+				break;
+			}
 			check_block = false;
 		}
 		myboard->input_key();
@@ -40,6 +43,6 @@ void start_game() {
 
 
 int main() {
-	InitGame();
+	init_buffer();
 	start_game();
 }

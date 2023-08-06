@@ -1,5 +1,5 @@
 #pragma once
-static int shape[7][4][4][4]{
+static const int shape[7][4][4][4]{
 	{
 		{
 			{1,1,1,1},

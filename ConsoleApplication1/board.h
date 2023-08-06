@@ -2,17 +2,19 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-const char BLOCK_TYPES[][4] = {
+const char block_type[][4] = {
 	"  ",
 	"▣",
 	"□",
 	"□"
 };
 class board {
-	int base[24][14] = {};
+private:
+	int point = 0;
 	block* myblock = nullptr;
-	int map_x = 24;
-	int map_y = 14;
+	const static int map_x = 24;
+	const static int map_y = 14;
+	int base[map_x][map_y] = {};
 public:
 	board() {
 		for (int i = 0; i < map_x; i++) {
@@ -31,15 +33,12 @@ public:
 			for (int j = 0; j < map_y; j++) {
 				coord.X = y_pos;
 				coord.Y = i;
-				SetConsoleCursorPosition(console.hBuffer[console.nCurBuffer], coord);
-				// 출력 버퍼의 해당 커서 위치에 출력
-				WriteFile(console.hBuffer[console.nCurBuffer], BLOCK_TYPES[base[i][j]], sizeof(BLOCK_TYPES[base[i][j]]), &dw, NULL);
-				//▣와 □가 띄어쓰기 2개 분량이라 y값을 2씩 이동
+				SetConsoleCursorPosition(console.buffers[console.buffer_now], coord);
+				WriteFile(console.buffers    [console.buffer_now], block_type[base[i][j]], sizeof(block_type[base[i][j]]), &dw, NULL);
 				y_pos += 2;
 
 			}
 		}
-
 	}
 
 	bool get_block(int num_init, int shp_init) {
@@ -118,6 +117,7 @@ public:
 		}
 
 		if (check) {
+			point++;
 			for (int i = 1; i < map_y - 1; i++) {
 				base[x][i] = 0;
 			}
@@ -180,48 +180,49 @@ public:
 		}
 		return false;
 	}
+	//출처 https://eskeptor.tistory.com/192
 	void input_key()
 	{
-		int nKey = 0;
+		int key = 0;
 
 		// 키입력이 감지되었을 때
 		if (_kbhit() > 0)
 		{
 			// 입력된 키를 받아온다.
-			nKey = _getch();
+			key = _getch();
 
-			switch (nKey)
+			switch (key)
 			{
-			case eKeyCode::KEY_UP:    // 방향키 위를 눌렀을 때
-			{
-				shift_shape();
-				break;
-			}
-			case eKeyCode::KEY_DOWN:  // 방향키 아래를 눌렀을 때
-			{
-				move_block(1, 0);
-				break;
-			}
-			case eKeyCode::KEY_LEFT:  // 방향키 왼쪽을 눌렀을 때
-			{
+				case eKeyCode::KEY_UP:    // 방향키 위를 눌렀을 때
+				{
+					shift_shape();
+					break;
+				}
+				case eKeyCode::KEY_DOWN:  // 방향키 아래를 눌렀을 때
+				{
+					move_block(1, 0);
+					break;
+				}
+				case eKeyCode::KEY_LEFT:  // 방향키 왼쪽을 눌렀을 때
+				{
 				move_block(0, -1);
-				break;
-			}
-			case eKeyCode::KEY_RIGHT: // 방향키 오른쪽을 눌렀을 때
-			{
-				move_block(0, 1);
-				break;
-			}
-			case eKeyCode::KEY_SPACE: // 스페이스바를 눌렀을 때
-			{
-				for (int i = 0; i < 36; i++) move_block(1, 0);
-				break;
-			}
-			case eKeyCode::KEY_R:     // R키를 눌렀을 때
-			{
-				break;
-			}
+					break;
+				}
+				case eKeyCode::KEY_RIGHT: // 방향키 오른쪽을 눌렀을 때
+				{
+					move_block(0, 1);
+					break;
+				}
+				case eKeyCode::KEY_SPACE: // 스페이스바를 눌렀을 때
+				{
+					for (int i = 0; i < 36; i++) move_block(1, 0);
+					break;
+				}
 			}
 		}
+	}
+
+	void show_point() {
+		cout << point << '\n';
 	}
 };
