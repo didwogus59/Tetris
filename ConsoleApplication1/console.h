@@ -12,24 +12,20 @@ double_buffer console;
 
 void init_buffer()
 {
-		CONSOLE_CURSOR_INFO consoleCursor{ 1, FALSE };
-		CONSOLE_SCREEN_BUFFER_INFO consoleInfo{ 0, };
-		GetConsoleScreenBufferInfo(console.console_now, &consoleInfo);
+	CONSOLE_SCREEN_BUFFER_INFO consoleInfo{ 0, };
+	GetConsoleScreenBufferInfo(console.console_now, &consoleInfo);
 
-		console.console_width = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left;
-		console.console_height = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top;
+	CONSOLE_CURSOR_INFO consoleCursor{ 1, FALSE };
 
-		console.buffers[0] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-		SetConsoleScreenBufferSize(console.buffers[0], consoleInfo.dwSize);
-		SetConsoleWindowInfo(console.buffers[0], TRUE, &consoleInfo.srWindow);
-		SetConsoleCursorInfo(console.buffers[0], &consoleCursor);         
+	console.console_width = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left;
+	console.console_height = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top;
 
-		console.buffers[1] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-		SetConsoleScreenBufferSize(console.buffers[1], consoleInfo.dwSize);
-		SetConsoleWindowInfo(console.buffers[1], TRUE, &consoleInfo.srWindow);
-		SetConsoleCursorInfo(console.buffers[1], &consoleCursor);
+	console.buffers[0] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+	SetConsoleCursorInfo(console.buffers[0], &consoleCursor);         
+
+	console.buffers[1] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+	SetConsoleCursorInfo(console.buffers[1], &consoleCursor);
 }
-
 void destroy_buffer()
 {
 	CloseHandle(console.buffers[0]);
@@ -38,12 +34,12 @@ void destroy_buffer()
 
 void ClearScreen()
 {
-	COORD pos{ 0, };
+	COORD coor{ 0, };
 	DWORD dw = 0;
 	unsigned size = console.console_width * console.console_height;
 
-	FillConsoleOutputCharacter(console.console_now, ' ', size, pos, &dw);
-	SetConsoleCursorPosition(console.console_now, pos);
+	FillConsoleOutputCharacter(console.console_now, ' ', size, coor, &dw);
+	SetConsoleCursorPosition(console.console_now, coor);
 }
 
 void BufferFlip()

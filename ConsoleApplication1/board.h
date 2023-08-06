@@ -26,15 +26,15 @@ public:
 		}
 	}
 	void board_print() {
-		COORD coord{ 0, };
+		COORD coor{ 0, };
 		DWORD dw = 0;
 		for (int i = 0; i < map_x; i++) {
 			int y_pos = 0;
 			for (int j = 0; j < map_y; j++) {
-				coord.X = y_pos;
-				coord.Y = i;
-				SetConsoleCursorPosition(console.buffers[console.buffer_now], coord);
-				WriteFile(console.buffers    [console.buffer_now], block_type[base[i][j]], sizeof(block_type[base[i][j]]), &dw, NULL);
+				coor.X = y_pos;
+				coor.Y = i;
+				SetConsoleCursorPosition(console.buffers[console.buffer_now], coor);
+				WriteFile(console.buffers[console.buffer_now], block_type[base[i][j]], sizeof(block_type[base[i][j]]), &dw, NULL);
 				y_pos += 2;
 
 			}
@@ -78,7 +78,7 @@ public:
 							for (int p = 0; p < 4; p++) {
 								for (int q = 0; q < 4; q++) {
 									if (shape[num][shp][p][q] == 1)
-										base[pos_x + p][pos_y + q] = 3;//다운 말고 다른 상황 고려 수정 필
+										base[pos_x + p][pos_y + q] = 3;
 								}
 							}
 							delete myblock;
