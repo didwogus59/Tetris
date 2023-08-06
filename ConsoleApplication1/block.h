@@ -36,4 +36,7 @@ public:
 	void set_y(int y) {
 		this->now_y = y;
 	}
+	void set_shape(int shp) {
+		this->shp = shp;
+	}
 };

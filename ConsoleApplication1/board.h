@@ -84,6 +84,7 @@ public:
 							}
 							delete myblock;
 							myblock = nullptr;
+							for (int k = 0; k < 4; k++) clear_line(k + pos_x);
 						}
 						return true;
 					}
@@ -107,24 +108,77 @@ public:
 		}
 		return false;
 	}
-	void line_check(int x) {
-		bool check = true;
+	void clear_line(int x) {
+		bool check = true;//두줄 한 번에 사라짐 + 위에게 안 움직임
 		for (int i = 1; i < map_y - 1; i++) {
 			if (base[x][i] != 3) {
 				check = false;
 				break;
 			}
 		}
+
 		if (check) {
 			for (int i = 1; i < map_y - 1; i++) {
 				base[x][i] = 0;
 			}
-			for (int i = x; x >= 0; x--) {
-				for (int j = 1; j < map_y - 1; j++) {
-					base[x + 1][j] = base[x][j];
+			for (int i = x; x >= 1; i--) {
+				if (check) {
+					for (int j = 1; j < map_y - 1; j++) {
+						base[i][j] = base[i - 1][j];
+						base[i - 1][j] = 0;
+					}
+				}
+				else {
+					break;
+				}
+     				check = false;
+				if (i >= 2) {
+					for (int j = 1; j < map_y - 1; j++) {
+						if (base[i - 2][j] == 3) {
+							check = true;
+							break;
+						}
+					}
 				}
 			}
 		}
+	}
+	bool shift_shape() {
+		if (myblock == NULL)
+			return false;
+		bool check = true;
+		int num = myblock->get_num();
+		int shp = myblock->get_shape();
+		int pos_x = myblock->get_x();
+		int pos_y = myblock->get_y();
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if(shape[num][(shp+1)%4][i][j] == 1) {
+					if (base[pos_x + i][pos_y + j] != 0 && base[pos_x + i][pos_y + j] != 2) {
+						check = false;
+					}
+				}
+			}
+		}
+		if (check) {
+			myblock->set_shape((shp + 1) % 4);
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					if (shape[num][shp][i][j] == 1) {
+						base[pos_x + i][pos_y + j] = 0;
+					}
+				}
+			}
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					if (shape[num][(shp + 1) % 4][i][j] == 1) {
+						base[pos_x + i][pos_y + j] = 2;
+					}
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 	void input_key()
 	{
@@ -140,6 +194,7 @@ public:
 			{
 			case eKeyCode::KEY_UP:    // 방향키 위를 눌렀을 때
 			{
+				shift_shape();
 				break;
 			}
 			case eKeyCode::KEY_DOWN:  // 방향키 아래를 눌렀을 때
