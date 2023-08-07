@@ -29,8 +29,8 @@ void start_game() {
 		}
 		myboard->input_key();
 		myboard->board_print();
-		ClearScreen();
-		BufferFlip();
+		clear_console();
+		flip_buffer();
 		cur_time = clock();
 		if (cur_time - bef_time > 500) {
 			if (myboard->move_block(1,0)) {

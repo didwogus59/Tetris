@@ -26,7 +26,7 @@ public:
 		}
 	}
 	void board_print() {
-		COORD coor{ 0, };
+		COORD coor{0, };
 		DWORD dw = 0;
 		for (int i = 0; i < map_x; i++) {
 			int y_pos = 0;
@@ -61,6 +61,7 @@ public:
 		}
 		return false;
 	}
+
 	bool move_block(int move_x, int move_y) {
 		if (myblock == NULL)
 			return true;
@@ -107,6 +108,7 @@ public:
 		}
 		return false;
 	}
+
 	void clear_line(int x) {
 		bool check = true;//두줄 한 번에 사라짐 + 위에게 안 움직임
 		for (int i = 1; i < map_y - 1; i++) {
@@ -143,6 +145,7 @@ public:
 			}
 		}
 	}
+
 	bool shift_shape() {
 		if (myblock == NULL)
 			return false;
@@ -180,41 +183,29 @@ public:
 		}
 		return false;
 	}
-	//출처 https://eskeptor.tistory.com/192
-	void input_key()
-	{
+
+	void input_key(){
 		int key = 0;
-
-		// 키입력이 감지되었을 때
-		if (_kbhit() > 0)
-		{
-			// 입력된 키를 받아온다.
+		if (_kbhit()){
 			key = _getch();
-
-			switch (key)
-			{
-				case eKeyCode::KEY_UP:    // 방향키 위를 눌렀을 때
-				{
+			switch (key){
+				case key_code::up:{
 					shift_shape();
 					break;
 				}
-				case eKeyCode::KEY_DOWN:  // 방향키 아래를 눌렀을 때
-				{
+				case key_code::down:{
 					move_block(1, 0);
 					break;
 				}
-				case eKeyCode::KEY_LEFT:  // 방향키 왼쪽을 눌렀을 때
-				{
+				case key_code::left:{
 				move_block(0, -1);
 					break;
 				}
-				case eKeyCode::KEY_RIGHT: // 방향키 오른쪽을 눌렀을 때
-				{
+				case key_code::right: {
 					move_block(0, 1);
 					break;
 				}
-				case eKeyCode::KEY_SPACE: // 스페이스바를 눌렀을 때
-				{
+				case key_code::space:{
 					for (int i = 0; i < 36; i++) move_block(1, 0);
 					break;
 				}

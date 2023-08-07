@@ -1,10 +1,10 @@
 #pragma once
-// Key Code
-enum eKeyCode
+
+enum key_code
 {
-    KEY_UP = 72,     // 방향키 ↑
-    KEY_DOWN = 80,   // 방향키 ↓
-    KEY_LEFT = 75,   // 방향키 ←
-    KEY_RIGHT = 77,  // 방향키 →
-    KEY_SPACE = 32,  // 스페이스바
+    up = 72,
+    down = 80,
+    left = 75, 
+    right = 77,  
+    space = 32,  
 };
