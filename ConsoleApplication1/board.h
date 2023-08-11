@@ -12,27 +12,33 @@ class board {
 private:
 	int point = 0;
 	block* myblock = nullptr;
-	const static int map_x = 24;
+	const static int map_x = 27;
 	const static int map_y = 14;
-	int base[map_x][map_y] = {};
+	int** base;
 public:
 	board() {
+		base = new int* [map_x];
+
 		for (int i = 0; i < map_x; i++) {
+			base[i] = new int[map_y];
+			for (int j = 0; j < map_y; j++) {
+				base[i][j] = 0;
+			}
 			base[i][0] = 1;
-			base[i][13] = 1;
+			base[i][map_y-1] = 1;
 		}
 		for (int i = 0; i < map_y; i++) {
-			base[23][i] = 1;
+			base[map_x-1][i] = 1;
 		}
 	}
-	void board_print() {
+	void board_print(int x = 0, int y = 0) {
 		COORD coor{0, };
 		DWORD dw = 0;
 		for (int i = 0; i < map_x; i++) {
 			int y_pos = 0;
 			for (int j = 0; j < map_y; j++) {
-				coor.X = y_pos;
-				coor.Y = i;
+				coor.X = y + y_pos;
+				coor.Y = x + i;
 				SetConsoleCursorPosition(console.buffers[console.buffer_now], coor);
 				WriteFile(console.buffers[console.buffer_now], block_type[base[i][j]], sizeof(block_type[base[i][j]]), &dw, NULL);
 				y_pos += 2;
@@ -84,7 +90,7 @@ public:
 							}
 							delete myblock;
 							myblock = nullptr;
-							for (int k = 0; k < 4; k++) clear_line(k + pos_x);
+							for (int k = 0; k < 4; k++) clear_line(k + pos_x-1);
 						}
 						return true;
 					}
@@ -110,35 +116,37 @@ public:
 	}
 
 	void clear_line(int x) {
-		bool check = true;//두줄 한 번에 사라짐 + 위에게 안 움직임
-		for (int i = 1; i < map_y - 1; i++) {
-			if (base[x][i] != 3) {
-				check = false;
-				break;
-			}
-		}
-
-		if (check) {
-			point++;
+		if (x < map_x && x > 0) {
+			bool check = true;//두줄 한 번에 사라짐 + 위에게 안 움직임
 			for (int i = 1; i < map_y - 1; i++) {
-				base[x][i] = 0;
-			}
-			for (int i = x; x >= 1; i--) {
-				if (check) {
-					for (int j = 1; j < map_y - 1; j++) {
-						base[i][j] = base[i - 1][j];
-						base[i - 1][j] = 0;
-					}
-				}
-				else {
+				if (base[x][i] != 3) {
+					check = false;
 					break;
 				}
-     				check = false;
-				if (i >= 2) {
-					for (int j = 1; j < map_y - 1; j++) {
-						if (base[i - 2][j] == 3) {
-							check = true;
-							break;
+			}
+
+			if (check) {
+				point++;
+				for (int i = 1; i < map_y - 1; i++) {
+					base[x][i] = 0;
+				}
+				for (int i = x; x >= 1; i--) {
+					if (check) {
+						for (int j = 1; j < map_y - 1; j++) {
+							base[i][j] = base[i - 1][j];
+							base[i - 1][j] = 0;
+						}
+					}
+					else {
+						break;
+					}
+					check = false;
+					if (i >= 2) {
+						for (int j = 1; j < map_y - 1; j++) {
+							if (base[i - 2][j] == 3) {
+								check = true;
+								break;
+							}
 						}
 					}
 				}
@@ -212,8 +220,22 @@ public:
 			}
 		}
 	}
+	void get_multi_data() {
 
-	void show_point() {
-		cout << point << '\n';
+	}
+
+	int show_point() {
+		return point;
+	}
+
+	int** get_base() {
+		return base;
+	}
+
+	int get_map_x() {
+		return map_x;
+	}
+	int get_map_y() {
+		return map_y;
 	}
 };

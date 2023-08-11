@@ -135,6 +135,7 @@
     <ClInclude Include="console.h" />
     <ClInclude Include="keycode.h" />
     <ClInclude Include="shape.h" />
+    <ClInclude Include="multi_play.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

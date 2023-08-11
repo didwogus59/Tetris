@@ -1,5 +1,5 @@
 #pragma once
-
+#include <windows.h>
 struct double_buffer{
 	HANDLE console_now = GetStdHandle(STD_OUTPUT_HANDLE);
 	int console_width, console_height;
