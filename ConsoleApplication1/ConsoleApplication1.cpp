@@ -89,7 +89,10 @@ void start_multi_game() {
 		}
 	}
 	else {
-		client* hostee = new client();
+		char* ip = new char[20];
+		cout << "please submit server ip\n";
+		cin >> ip;
+		client* hostee = new client(ip);
 		hostee->connect_server();
 		while (1) {
 			if (check_block) {
@@ -100,7 +103,7 @@ void start_multi_game() {
 				}
 				check_block = false;
 			}
-			myboard->input_key();//버퍼를 비워줘야함 안 그럼 이전에 눌렀던게 나옴
+			myboard->input_key();
 			fflush(stdin);
 			myboard->board_print();
 			yourboard->board_print(0, 40);

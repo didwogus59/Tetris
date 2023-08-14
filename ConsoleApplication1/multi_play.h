@@ -7,7 +7,6 @@
 
 #define PORT 4578
 #define PACKET_SIZE 2048
-#define SERVER_IP "127.0.0.1"
 class multi_host {
 
 	WSADATA wsaDATA;
@@ -67,14 +66,15 @@ class client {
 	WSADATA wsaDATA;
 	SOCKET hSocket;
 	SOCKADDR_IN tAddr = {};
+	PCSTR SERVER_IP;
 public:
-	client() {
+	client(char* ip_addr) {
+		SERVER_IP = ip_addr;
 		WSAStartup(MAKEWORD(2, 2), &wsaDATA);
 		hSocket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 		tAddr.sin_family = AF_INET;
 		tAddr.sin_port = htons(PORT);
 		inet_pton(AF_INET, SERVER_IP, &(tAddr.sin_addr.s_addr));
-
 	}
 
 	void connect_server() {
